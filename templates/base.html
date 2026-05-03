@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>{% block title %}Adarsh Singh | AI/ML Portfolio{% endblock %}</title>
+    
+    <!-- Favicon - Multiple sizes for all devices -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='images/android-chrome-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/android-chrome-512x512.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='images/site.webmanifest') }}">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Background Canvas -->
+    <canvas id="galaxyCanvas"></canvas>
+
+    <!-- Custom Cursor Elements -->
+    <div class="target-outer"></div>
+    <div class="target-inner"></div>
+    <div class="target-dot"></div>
+    <div class="target-lock"></div>
+    <div class="target-cross"></div>
+    <div class="target-trail"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-3d">⟁</div>
+                <a href="{{ url_for('home') }}" class="logo-link">
+                    <span class="logo-text">adarsh</span>
+                    <span class="logo-dot">.</span>
+                    <span class="logo-ai">Ai</span>
+                </a>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            
+            <!-- Navigation Links -->
+            <ul class="nav-links" id="nav-links">
+                <li><a href="{{ url_for('home') }}" class="nav-link" data-page="home"><i class="fas fa-explosion"></i><span>HOME</span></a></li>
+                <li><a href="{{ url_for('projects') }}" class="nav-link" data-page="projects"><i class="fas fa-microchip"></i><span>PROJECTS</span></a></li>
+                <li><a href="{{ url_for('resume') }}" class="nav-link" data-page="resume"><i class="fas fa-user-ninja"></i><span>RESUME</span></a></li>
+                <li><a href="{{ url_for('contact') }}" class="nav-link" data-page="contact"><i class="fas fa-satellite-dish"></i><span>CONTACT</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2024 Adarsh Singh | <span class="glitch-text">⍟ from imagination → reality ⍟</span></p>
+            <div class="social-links">
+                <a href="https://github.com/Adarsh-SSingh" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/adarsh-singh-6891a6254/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://x.com/adarshsingh___" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/adar.sh.singh_/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://leetcode.com/u/Adarsh--singh/" target="_blank"><i class="fas fa-code"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // HOLOGRAPHIC NEURAL MATRIX BACKGROUND
+        // ============================================
+        
+        const canvas = document.getElementById('galaxyCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let particles = [];
+        let cubes = [];
+        let gridLines = [];
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let time = 0;
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        class StarParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.originalX = this.x;
+                this.originalY = this.y;
+                this.speedX = (Math.random() - 0.5) * 0.2;
+                this.speedY = (Math.random() - 0.5) * 0.2;
+                this.twinkle = Math.random() * Math.PI * 2;
+                this.twinkleSpeed = 0.02 + Math.random() * 0.03;
+                this.brightness = 0.3 + Math.random() * 0.7;
+                this.hue = 180 + Math.random() * 100;
+            }
+            
+            update() {
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 120) {
+                    const angle = Math.atan2(dy, dx);
+                    const force = (120 - dist) / 120;
+                    this.x -= Math.cos(angle) * force * 2.5;
+                    this.y -= Math.sin(angle) * force * 2.5;
+                } else {
+                    this.x += (this.originalX - this.x) * 0.02;
+                    this.y += (this.originalY - this.y) * 0.02;
+                }
+                this.twinkle += this.twinkleSpeed;
+            }
+            
+            draw() {
+                const opacity = this.brightness + Math.sin(this.twinkle) * 0.3;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size + 2, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.hue}, 80%, 65%, ${opacity * 0.2})`;
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.hue}, 85%, 65%, ${opacity})`;
+                ctx.fill();
+            }
+        }
+        
+        class DataCube {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = 8 + Math.random() * 12;
+                this.speedY = 0.3 + Math.random() * 0.5;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = 0.01 + Math.random() * 0.02;
+                this.hue = 180 + Math.random() * 100;
+                this.opacity = 0.3 + Math.random() * 0.4;
+            }
+            
+            update() {
+                this.y -= this.speedY;
+                this.rotation += this.rotSpeed;
+                if (this.y + this.size < 0) {
+                    this.y = canvas.height + this.size;
+                    this.x = Math.random() * canvas.width;
+                }
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 100) {
+                    const angle = Math.atan2(dy, dx);
+                    const force = (100 - dist) / 100;
+                    this.x -= Math.cos(angle) * force * 3;
+                }
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.beginPath();
+                ctx.rect(-this.size/2, -this.size/2, this.size, this.size);
+                ctx.strokeStyle = `hsla(${this.hue}, 80%, 60%, ${this.opacity})`;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.rect(-this.size/3, -this.size/3, this.size/1.5, this.size/1.5);
+                ctx.fillStyle = `hsla(${this.hue}, 80%, 60%, ${this.opacity * 0.3})`;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+        
+        class NeuralLine {
+            constructor() {
+                this.x1 = Math.random() * canvas.width;
+                this.y1 = Math.random() * canvas.height;
+                this.x2 = this.x1 + (Math.random() - 0.5) * 200;
+                this.y2 = this.y1 + (Math.random() - 0.5) * 200;
+                this.hue = 180 + Math.random() * 100;
+                this.life = 0.3 + Math.random() * 0.5;
+            }
+            
+            draw() {
+                const gradient = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
+                gradient.addColorStop(0, `hsla(${this.hue}, 80%, 60%, ${this.life * 0.3})`);
+                gradient.addColorStop(1, `hsla(${this.hue + 30}, 80%, 60%, 0)`);
+                ctx.beginPath();
+                ctx.moveTo(this.x1, this.y1);
+                ctx.lineTo(this.x2, this.y2);
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                this.life -= 0.003;
+                if (this.life <= 0) {
+                    this.life = 0.3 + Math.random() * 0.5;
+                    this.x1 = Math.random() * canvas.width;
+                    this.y1 = Math.random() * canvas.height;
+                    this.x2 = this.x1 + (Math.random() - 0.5) * 250;
+                    this.y2 = this.y1 + (Math.random() - 0.5) * 250;
+                }
+            }
+        }
+        
+        function drawGrid() {
+            const gridSize = 40;
+            const offsetX = canvas.width / 2;
+            const offsetY = canvas.height - 50;
+            const perspective = 0.3;
+            for (let i = -20; i <= 20; i++) {
+                const x1 = offsetX + i * gridSize;
+                const y1 = offsetY;
+                const x2 = offsetX + i * gridSize * perspective;
+                const y2 = offsetY - 300;
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.strokeStyle = `rgba(0, 238, 255, ${0.1 + Math.sin(time + i) * 0.05})`;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+                const x1h = offsetX + i * gridSize * perspective;
+                const y1h = offsetY - 300;
+                const x2h = offsetX - i * gridSize * perspective;
+                const y2h = offsetY - 300;
+                ctx.beginPath();
+                ctx.moveTo(x1h, y1h);
+                ctx.lineTo(x2h, y2h);
+                ctx.stroke();
+            }
+        }
+        
+        let scanAngle = 0;
+        function drawRadar() {
+            scanAngle += 0.01;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(canvas.width, canvas.height) * 0.6;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, scanAngle - 0.2, scanAngle);
+            ctx.strokeStyle = `hsla(${180 + Math.sin(scanAngle) * 30}, 80%, 60%, 0.15)`;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+        
+        function init() {
+            particles = [];
+            cubes = [];
+            gridLines = [];
+            for (let i = 0; i < 150; i++) particles.push(new StarParticle());
+            for (let i = 0; i < 30; i++) cubes.push(new DataCube());
+            for (let i = 0; i < 40; i++) gridLines.push(new NeuralLine());
+        }
+        
+        function animateBackground() {
+            time += 0.02;
+            ctx.fillStyle = 'rgba(5, 5, 15, 0.12)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < gridLines.length; i++) gridLines[i].draw();
+            drawGrid();
+            for (let i = 0; i < cubes.length; i++) {
+                cubes[i].update();
+                cubes[i].draw();
+            }
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            drawRadar();
+            requestAnimationFrame(animateBackground);
+        }
+        
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            init();
+        });
+        
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        resizeCanvas();
+        init();
+        animateBackground();
+        
+        // ============================================
+        // NEON TARGET LOCK CURSOR
+        // ============================================
+        
+        const targetOuter = document.querySelector('.target-outer');
+        const targetInner = document.querySelector('.target-inner');
+        const targetDot = document.querySelector('.target-dot');
+        const targetLock = document.querySelector('.target-lock');
+        const targetTrail = document.querySelector('.target-trail');
+        
+        const targetCross = document.querySelector('.target-cross');
+        const crossH = document.createElement('div');
+        const crossV = document.createElement('div');
+        crossH.classList.add('target-cross-h');
+        crossV.classList.add('target-cross-v');
+        targetCross.appendChild(crossH);
+        targetCross.appendChild(crossV);
+        
+        // Create trail particles
+        let trailParticles = [];
+        for (let i = 0; i < 8; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('trail-particle');
+            document.body.appendChild(particle);
+            trailParticles.push({ element: particle });
+        }
+        
+        let cursorX = 0, cursorY = 0;
+        let outerX = 0, outerY = 0;
+        let innerX = 0, innerY = 0;
+        let dotX = 0, dotY = 0;
+        let lockX = 0, lockY = 0;
+        let crossX = 0, crossY = 0;
+        let mouseHistory = [];
+        
+        document.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+            mouseHistory.unshift({ x: cursorX, y: cursorY });
+            if (mouseHistory.length > 10) mouseHistory.pop();
+            
+            for (let i = 0; i < trailParticles.length; i++) {
+                const idx = Math.min(i + 1, mouseHistory.length - 1);
+                if (mouseHistory[idx]) {
+                    trailParticles[i].element.style.transform = `translate(${mouseHistory[idx].x}px, ${mouseHistory[idx].y}px)`;
+                    trailParticles[i].element.style.opacity = 0.6 - (i / trailParticles.length);
+                }
+            }
+        });
+        
+        function animateTargetCursor() {
+            outerX += (cursorX - outerX) * 0.1;
+            outerY += (cursorY - outerY) * 0.1;
+            targetOuter.style.transform = `translate(${outerX}px, ${outerY}px)`;
+            
+            innerX += (cursorX - innerX) * 0.18;
+            innerY += (cursorY - innerY) * 0.18;
+            targetInner.style.transform = `translate(${innerX}px, ${innerY}px)`;
+            
+            dotX += (cursorX - dotX) * 0.35;
+            dotY += (cursorY - dotY) * 0.35;
+            targetDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
+            
+            lockX += (cursorX - lockX) * 0.12;
+            lockY += (cursorY - lockY) * 0.12;
+            targetLock.style.transform = `translate(${lockX}px, ${lockY}px)`;
+            
+            crossX += (cursorX - crossX) * 0.2;
+            crossY += (cursorY - crossY) * 0.2;
+            targetCross.style.transform = `translate(${crossX}px, ${crossY}px)`;
+            
+            requestAnimationFrame(animateTargetCursor);
+        }
+        
+        animateTargetCursor();
+        
+        const hoverElements = document.querySelectorAll('a, button, .btn-magnetic, .btn-glass, .btn-cyber, .project-card-3d, .nav-link, .logo, .stat-orb, .profile-card, .hologram-card, .timeline-card-3d, .looking-premium-card, .achievement-premium-card, .skill-planet, .footer-social a');
+        
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                targetOuter.style.transform = `translate(${outerX}px, ${outerY}px) scale(1.5)`;
+                targetOuter.style.borderColor = '#fff';
+                targetOuter.style.boxShadow = '0 0 25px #0ef';
+                targetOuter.style.background = 'radial-gradient(circle, rgba(0,238,255,0.15) 0%, transparent 70%)';
+                targetInner.style.transform = `translate(${innerX}px, ${innerY}px) scale(1.5)`;
+                targetInner.style.borderColor = '#0ef';
+                targetInner.style.boxShadow = '0 0 20px #0ef';
+                targetDot.style.transform = `translate(${dotX}px, ${dotY}px) scale(2)`;
+                targetDot.style.background = '#fff';
+                targetDot.style.boxShadow = '0 0 15px #0ef';
+                targetLock.style.transform = `translate(${lockX}px, ${lockY}px) scale(1.3)`;
+                targetLock.style.opacity = '0.8';
+                targetLock.style.borderColor = '#fff';
+                crossH.style.background = '#fff';
+                crossV.style.background = '#fff';
+                crossH.style.boxShadow = '0 0 12px #0ef';
+                crossV.style.boxShadow = '0 0 12px #0ef';
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                targetOuter.style.transform = `translate(${outerX}px, ${outerY}px) scale(1)`;
+                targetOuter.style.borderColor = '#0ef';
+                targetOuter.style.boxShadow = '0 0 15px #0ef';
+                targetOuter.style.background = 'radial-gradient(circle, rgba(0,238,255,0.05) 0%, transparent 70%)';
+                targetInner.style.transform = `translate(${innerX}px, ${innerY}px) scale(1)`;
+                targetInner.style.borderColor = '#fff';
+                targetInner.style.boxShadow = '0 0 12px #0ef';
+                targetDot.style.transform = `translate(${dotX}px, ${dotY}px) scale(1)`;
+                targetDot.style.background = '#fff';
+                targetDot.style.boxShadow = '0 0 12px #0ef';
+                targetLock.style.transform = `translate(${lockX}px, ${lockY}px) scale(1)`;
+                targetLock.style.opacity = '0.4';
+                targetLock.style.borderColor = '#0ef';
+                crossH.style.background = '#0ef';
+                crossV.style.background = '#0ef';
+                crossH.style.boxShadow = '0 0 8px #0ef';
+                crossV.style.boxShadow = '0 0 8px #0ef';
+            });
+        });
+        
+        document.addEventListener('click', (e) => {
+            targetLock.style.transform = `translate(${lockX}px, ${lockY}px) scale(2)`;
+            targetLock.style.opacity = '1';
+            targetLock.style.borderColor = '#fff';
+            targetLock.style.borderWidth = '3px';
+            targetOuter.style.transform = `translate(${outerX}px, ${outerY}px) scale(0.8)`;
+            targetInner.style.transform = `translate(${innerX}px, ${innerY}px) scale(0.8)`;
+            
+            setTimeout(() => {
+                targetLock.style.transform = `translate(${lockX}px, ${lockY}px) scale(1)`;
+                targetLock.style.opacity = '0.4';
+                targetLock.style.borderColor = '#0ef';
+                targetLock.style.borderWidth = '2px';
+                targetOuter.style.transform = `translate(${outerX}px, ${outerY}px) scale(1)`;
+                targetInner.style.transform = `translate(${innerX}px, ${innerY}px) scale(1)`;
+            }, 250);
+        });
+        
+        // ============================================
+        // RESPONSIVE HAMBURGER MENU
+        // ============================================
+        
+        const hamburger = document.getElementById('hamburger');
+        const navLinksMenu = document.getElementById('nav-links');
+        
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinksMenu.classList.toggle('active');
+            });
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinksMenu.classList.remove('active');
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navLinksMenu.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navLinksMenu.classList.remove('active');
+                }
+            });
+        }
+        
+        // ============================================
+        // ACTIVE NAV LINK HIGHLIGHT
+        // ============================================
+        
+        function updateActiveNavLink() {
+            const currentPath = window.location.pathname;
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            if (currentPath === '/resume') {
+                const resumeLink = document.querySelector('.nav-link[data-page="resume"]');
+                if (resumeLink) resumeLink.classList.add('active');
+            } 
+            else if (currentPath === '/contact') {
+                const contactLink = document.querySelector('.nav-link[data-page="contact"]');
+                if (contactLink) contactLink.classList.add('active');
+            } 
+            else if (currentPath === '/projects') {
+                const projectsLink = document.querySelector('.nav-link[data-page="projects"]');
+                if (projectsLink) projectsLink.classList.add('active');
+            }
+            else if (currentPath === '/' || currentPath === '') {
+                const homeLink = document.querySelector('.nav-link[data-page="home"]');
+                if (homeLink) homeLink.classList.add('active');
+            }
+        }
+        
+        updateActiveNavLink();
+        window.addEventListener('scroll', updateActiveNavLink);
+        window.addEventListener('load', updateActiveNavLink);
+        
+        // Scroll animation observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.timeline-item-3d, .project-card-3d, .hologram-card, .skill-planet').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
