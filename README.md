@@ -136,7 +136,7 @@ Portfolio/
 ## 🔧 Installation
 
 ```bash
-git clone https://github.com/adarsh-singh17/Portfolio.git
+git clone https://github.com/Adarsh-SSingh/Portfolio.git
 cd Portfolio
 
 python -m venv venv
@@ -170,9 +170,9 @@ python app.py
 
 ## 📬 Connect With Me
 
-* GitHub: https://github.com/adarsh-singh17
+* GitHub: https://github.com/Adarsh-SSingh
 * LinkedIn: Adarsh Singh
-* LeetCode: vZ2RR0sfI2
+* LeetCode: Adarsh-SSingh
 
 ---
 
