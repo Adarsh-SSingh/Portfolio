@@ -2,7 +2,7 @@
 
 > Turning imagination into intelligent systems ⚡
 
-🌐 **Live Portfolio:** https://adarsh-portfolio.onrender.com
+🌐 **Live Portfolio:** https://adarsh-portfolio-48jh.onrender.com
 
 ---
 
