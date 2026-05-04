@@ -74,7 +74,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <p>© 2024 Adarsh Singh | <span class="glitch-text">⍟ from imagination → reality ⍟</span></p>
+            <p>© <span id="currentYear"></span> Adarsh Singh | <span class="glitch-text">⍟ from imagination → reality ⍟</span></p>
             <div class="social-links">
                 <a href="https://github.com/Adarsh-SSingh" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="https://www.linkedin.com/in/adarsh-singh-6891a6254/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
@@ -516,6 +516,8 @@
         document.querySelectorAll('.timeline-item-3d, .project-card-3d, .hologram-card, .skill-planet').forEach(el => {
             observer.observe(el);
         });
+        // Dynamic year for footer
+        document.getElementById('currentYear').innerHTML = new Date().getFullYear();    
     </script>
 </body>
 </html>
